@@ -1,7 +1,7 @@
 from turtle import Turtle
 import random
 
-INITIAL_DIRECTION = [0,30,60,120,150,180,210,240]
+BALL_AXIS_SPEED = 15
 
 class Ball(Turtle):
 
@@ -12,12 +12,22 @@ class Ball(Turtle):
         self.shapesize(stretch_len=1,stretch_wid=1)
         self.speed('fast')
         self.penup()
-        self.setheading(random.choice(INITIAL_DIRECTION))
-        
+        self.x_move = BALL_AXIS_SPEED
+        self.y_move = BALL_AXIS_SPEED
+        self.move_delay = 0.1
     def ball_move(self):
-        self.forward(20)
+        new_x = self.xcor() + self.x_move
+        new_y = self.ycor() + self.y_move
+        self.goto(new_x,new_y)
     
     def wall_bounce(self):
-        old_head = self.heading()
-        new_head = - old_head
-        self.seth(new_head)
+        self.y_move *= -1
+    
+    def paddle_bounce(self):
+        self.x_move *= -1
+        self.move_delay *= 0.9
+    
+    def reset_position(self):
+        self.goto(0,0)
+        self.x_move *= -1
+        self.move_delay = 0.1
